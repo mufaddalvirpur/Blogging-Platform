@@ -20,6 +20,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
   const [content, setContent] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [isPublished, setIsPublished] = useState(false);
+  const [isFormInitialized, setIsFormInitialized] = useState(false); // Flag to prevent re-initialization
 
   const { data: post, isLoading: isLoadingPost } = api.post.getById.useQuery({
     id: postId,
@@ -29,15 +30,17 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
     api.category.getAll.useQuery();
 
   useEffect(() => {
-    if (post) {
+    // Only set the form state once when the post data is loaded
+    if (post && !isFormInitialized) {
       setTitle(post.title);
       setContent(post.content ?? "");
       setIsPublished(post.published ?? false);
       const currentCategoryIds =
         post.postsToCategories?.map((ptc) => ptc.categoryId) ?? [];
       setSelectedCategories(currentCategoryIds);
+      setIsFormInitialized(true); // Mark form as initialized
     }
-  }, [post]);
+  }, [post, isFormInitialized]); // Depend on both post and the flag
 
   const utils = api.useUtils();
 
@@ -79,7 +82,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
     );
   }
 
-  if (!post) {
+  if (!post && !isLoadingPost) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-gray-900 text-white">
         <p>Post not found.</p>
