@@ -39,7 +39,8 @@ export default function PostPage({ params }: { params: { id: string } }) {
   const getHtmlContent = () => {
     if (post.content) {
       // Note: In a real app, you should use a more robust sanitizer like DOMPurify
-      const rawMarkup = marked(post.content, { sanitize: false }); // `sanitize` is deprecated, handle sanitization separately
+      // The `sanitize` option is deprecated, so we call marked() without it.
+      const rawMarkup = marked(post.content); 
       return { __html: rawMarkup };
     }
     return { __html: "" };
