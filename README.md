@@ -1,4 +1,4 @@
-Full-Stack Blogging Platform
+Full-Stack Blogging Platform - by Mufaddal Virpurwala
 
 This is a full-stack multi-user blogging platform, built as a technical assessment. It is a complete application that allows users to create, read, update, and delete blog posts, manage categories, and filter content, all wrapped in a clean, modern, and type-safe stack.
 
