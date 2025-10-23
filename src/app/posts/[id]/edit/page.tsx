@@ -4,8 +4,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api } from "~/trpc/react";
 import Link from "next/link";
-import SimpleMDE from "react-simplemde-editor";
+import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
+
+// Dynamically import SimpleMDE with SSR turned off
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+});
 
 export default function EditPostPage({ params }: { params: { id: string } }) {
   const router = useRouter();
