@@ -1,86 +1,124 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { api } from "~/trpc/react";
-import { marked } from "marked";
 
-export default function PostPage({ params }: { params: { id: string } }) {
-  const postId = params.id;
+export default function BlogPage() {
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    null,
+  );
 
-  const { data: post, isLoading, error } = api.post.getById.useQuery({
-    id: postId,
+  const {
+    data: postsData, // Renamed to avoid conflict with 'posts' from response
+    isLoading: isLoadingPosts,
+    error: postsError,
+  } = api.post.getAll.useQuery({
+    categoryId: selectedCategoryId ?? undefined,
+    includeDrafts: false, // Ensure we only fetch published posts
   });
 
-  if (isLoading) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-gray-900 text-white">
-        <p>Loading post...</p>
-      </main>
-    );
-  }
+  const { data: categories, isLoading: isLoadingCategories } =
+    api.category.getAll.useQuery();
 
-  if (error || !post) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gray-900 text-white">
-        <p className="mb-4 text-xl">
-          {error ? "Error loading post." : "Post not found."}
-        </p>
-        <Link
-          href="/blog"
-          className="rounded-lg bg-indigo-600 px-6 py-2 font-semibold text-white transition hover:bg-indigo-700"
-        >
-          Back to Blog
-        </Link>
-      </main>
-    );
-  }
-
-  // Parse the Markdown content
-  const getHtmlContent = () => {
-    if (post.content) {
-      // Note: In a real app, you should use a more robust sanitizer like DOMPurify
-      // The `sanitize` option is deprecated, so we call marked() without it.
-      const rawMarkup = marked(post.content); 
-      return { __html: rawMarkup };
-    }
-    return { __html: "" };
-  };
+  // The API now returns an object { posts: [], totalCount: 0 }
+  // We need to access the posts property.
+  const posts = postsData?.posts;
 
   return (
     <main className="min-h-screen bg-gray-900 text-white">
-      <div className="container mx-auto max-w-3xl px-4 py-12">
-        <div className="mb-8">
+      <div className="container mx-auto px-4 py-12">
+        <div className="mb-10 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+          <h1 className="text-5xl font-extrabold tracking-tight">
+            Recent <span className="text-indigo-500">Blog Posts</span>
+          </h1>
           <Link
-            href="/blog"
-            className="text-indigo-400 hover:text-indigo-300"
+            href="/dashboard"
+            className="whitespace-nowrap rounded-lg bg-white/10 px-6 py-3 font-semibold text-white transition hover:bg-white/20"
           >
-            &larr; Back to all posts
+            Go to Dashboard
           </Link>
         </div>
-        <article>
-          <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
-            {post.title}
-          </h1>
-          <div className="mb-6 flex items-center gap-4 text-sm text-gray-400">
-            <span>
-              Published on {new Date(post.createdAt).toLocaleDateString()}
-            </span>
-            <div className="flex flex-wrap items-center gap-2">
-              {post.postsToCategories?.map(({ category }) => (
-                <span
+
+        <div className="mb-8">
+          <h2 className="mb-4 text-lg font-semibold">Filter by Category</h2>
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => setSelectedCategoryId(null)}
+              className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                selectedCategoryId === null
+                  ? "bg-indigo-600 text-white"
+                  : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+              }`}
+            >
+              All Posts
+            </button>
+            {isLoadingCategories ? (
+              <p>Loading categories...</p>
+            ) : (
+              categories?.map((category) => (
+                <button
                   key={category.id}
-                  className="rounded-full bg-indigo-500/20 px-3 py-1 text-xs font-medium text-indigo-400"
+                  onClick={() => setSelectedCategoryId(category.id)}
+                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                    selectedCategoryId === category.id
+                      ? "bg-indigo-600 text-white"
+                      : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  }`}
                 >
                   {category.name}
-                </span>
-              ))}
-            </div>
+                </button>
+              ))
+            )}
           </div>
-          <div
-            className="prose prose-invert max-w-none text-lg text-gray-300"
-            dangerouslySetInnerHTML={getHtmlContent()}
-          />
-        </article>
+        </div>
+
+        {isLoadingPosts && <p>Loading posts...</p>}
+        {postsError && (
+          <p className="text-red-400">Error loading posts. Please try again.</p>
+        )}
+
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {posts && posts.length > 0 ? (
+            posts.map((post) => (
+              <Link href={`/blog/${post.id}`} key={post.id}>
+                <article className="flex h-full flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-800 transition hover:border-indigo-500">
+                  <div className="flex-grow p-6">
+                    <h3 className="mb-2 text-xl font-bold text-white">
+                      {post.title}
+                    </h3>
+                    <p className="mb-4 text-gray-400">
+                      {/* We use a simple substring for the snippet */}
+                      {post.content
+                        ? post.content.substring(0, 100) + "..."
+                        : ""}
+                    </p>
+                  </div>
+                  <div className="border-t border-gray-700 p-6">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {post.postsToCategories?.map(({ category }) => (
+                        <span
+                          key={category.id}
+                          className="rounded-full bg-indigo-500/20 px-3 py-1 text-xs font-medium text-indigo-400"
+                        >
+                          {category.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+              </Link>
+            ))
+          ) : (
+            !isLoadingPosts && (
+              <p className="md:col-span-3">No posts found for this category.</p>
+            )
+          )}
+        </div>
+
+        {/* Pagination UI would go here. Since we skipped that step,
+          we are only showing the first page of results.
+        */}
       </div>
     </main>
   );
