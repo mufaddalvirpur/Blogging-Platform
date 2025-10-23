@@ -7,7 +7,7 @@ This project was built from the ground up using Next.js 15 (App Router), tRPC fo
 Live Deployment
 
 You can view the live, deployed application here:
-[Your Vercel Deployment Link Will Go Here]
+https://blogging-platformz.vercel.app/
 
 Features Implemented
 

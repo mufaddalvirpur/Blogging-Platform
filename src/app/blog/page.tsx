@@ -114,10 +114,6 @@ export default function BlogPage() {
             )
           )}
         </div>
-
-        {/* Pagination UI would go here. Since we skipped that step,
-          we are only showing the first page of results.
-        */}
       </div>
     </main>
   );
