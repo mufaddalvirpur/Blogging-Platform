@@ -10,7 +10,7 @@ export default function BlogPage() {
   );
 
   const {
-    data: postsData, // Renamed to avoid conflict with 'posts' from response
+    data: posts, // Renamed to 'posts' - the data is the array itself
     isLoading: isLoadingPosts,
     error: postsError,
   } = api.post.getAll.useQuery({
@@ -21,9 +21,8 @@ export default function BlogPage() {
   const { data: categories, isLoading: isLoadingCategories } =
     api.category.getAll.useQuery();
 
-  // The API now returns an object { posts: [], totalCount: 0 }
-  // We need to access the posts property.
-  const posts = postsData?.posts;
+  // We no longer need this line, as 'posts' is the data directly.
+  // const posts = postsData?.posts;
 
   return (
     <main className="min-h-screen bg-gray-900 text-white">
@@ -34,7 +33,7 @@ export default function BlogPage() {
           </h1>
           <Link
             href="/dashboard"
-            className="whitespace-nowrap rounded-lg bg-white/10 px-6 py-3 font-semibold text-white transition hover:bg-white/20"
+            className="whitespace-nowrowrap rounded-lg bg-white/10 px-6 py-3 font-semibold text-white transition hover:bg-white/20"
           >
             Go to Dashboard
           </Link>
