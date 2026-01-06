@@ -6,8 +6,8 @@
 
 ### Live Deployment
 
-**You can view the live, deployed application here:
-https://blogging-platformz.vercel.app/ **
+**You can view the live, deployed application here:**
+https://blogging-platformz.vercel.app/ 
 
 ### Features Implemented
 
