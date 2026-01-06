@@ -1,19 +1,19 @@
-Full-Stack Blogging Platform - by Mufaddal Virpurwala
+## Full-Stack Blogging Platform - by Mufaddal Virpurwala
 
-This is a full-stack multi-user blogging platform, built as a technical assessment. It is a complete application that allows users to create, read, update, and delete blog posts, manage categories, and filter content, all wrapped in a clean, modern, and type-safe stack.
+**This is a full-stack multi-user blogging platform, built as a technical assessment. It is a complete application that allows users to create, read, update, and delete blog posts, manage categories, and filter content, all wrapped in a clean, modern, and type-safe stack.**
 
-This project was built from the ground up using Next.js 15 (App Router), tRPC for an end-to-end type-safe API, Drizzle ORM with a PostgreSQL database (hosted on Neon), and Tailwind CSS for styling.
+**This project was built from the ground up using Next.js 15 (App Router), tRPC for an end-to-end type-safe API, Drizzle ORM with a PostgreSQL database (hosted on Neon), and Tailwind CSS for styling.**
 
-Live Deployment
+### Live Deployment
 
-You can view the live, deployed application here:
-https://blogging-platformz.vercel.app/
+**You can view the live, deployed application here:
+https://blogging-platformz.vercel.app/ **
 
-Features Implemented
+### Features Implemented
 
 This project successfully implements all "Must Have" and "Should Have" features as specified by the assessment guidelines.
 
-Priority 1: Must Have
+**Priority 1: Must Have**
 
 [x] Post CRUD: Full Create, Read, Update, and Delete operations for blog posts.
 
@@ -31,7 +31,7 @@ Priority 1: Must Have
 
 [x] Clean, Professional UI: A clean, dark-mode UI focused on readability and usability.
 
-Priority 2: Should Have
+**Priority 2: Should Have**
 
 [x] Landing Page: A 3-section landing page (/) serves as the application's entry point, directing users to the blog or dashboard.
 
@@ -45,9 +45,9 @@ Priority 2: Should Have
 
 [x] Content Editor: Uses a Markdown editor (react-simplemde-editor) for a rich content creation experience.
 
-Technical Architecture & Decisions
+### Technical Architecture & Decisions
 
-1. tRPC Router Structure
+**1. tRPC Router Structure**
 
 The API layer, located in src/server/api/, is organized by data model for a clean separation of concerns:
 
@@ -59,7 +59,7 @@ category.ts: Handles all logic for categories (CRUD).
 
 This structure keeps the API modular and easy to extend.
 
-2. Database Schema
+**2. Database Schema**
 
 The schema is defined in src/server/db/schema.ts using Drizzle ORM.
 
@@ -69,15 +69,15 @@ categories: Stores category details. id is a serial (auto-incrementing integer).
 
 postsToCategories: A many-to-many join table linking posts and categories by their respective IDs.
 
-3. State Management
+**3. State Management**
 
-Server State: Handled entirely by tRPC's React Query integration. This provides caching, optimistic updates, and automatic cache invalidation (e.g., utils.post.getAll.invalidate()) out-of-the-box, keeping the UI perfectly in sync with the database.
+**Server State:** Handled entirely by tRPC's React Query integration. This provides caching, optimistic updates, and automatic cache invalidation (e.g., utils.post.getAll.invalidate()) out-of-the-box, keeping the UI perfectly in sync with the database.
 
-Client State: Handled by React useState for simple UI state, such as form inputs and filter selections.
+**Client State:** Handled by React useState for simple UI state, such as form inputs and filter selections.
 
-How to Run Locally
+### How to Run Locally
 
-1. Prerequisites
+**1. Prerequisites**
 
 Node.js (v18 or later)
 
@@ -85,7 +85,7 @@ npm
 
 A free PostgreSQL database. I used Neon.
 
-2. Setup Instructions
+**2. Setup Instructions**
 
 Clone the Repository:
 
@@ -93,31 +93,31 @@ git clone [https://github.com/](https://github.com/)[YOUR-USERNAME]/[YOUR-REPO-N
 cd [YOUR-REPO-NAME]
 
 
-Install Dependencies:
+**Install Dependencies:**
 
 npm install
 
 
-Set Up Environment Variables:
+**Set Up Environment Variables:**
 Create a file named .env.local in the root of the project. Get your database connection string from Neon (or your provider) and add it to this file:
 
 DATABASE_URL="postgresql://user:password@host:port/dbname?sslmode=require"
 
 
-Push the Schema to the Database:
+**Push the Schema to the Database:**
 This command will read your schema file and automatically create all the necessary tables in your remote database.
 
 npm run db:push
 
 
-Run the Development Server:
+**Run the Development Server:**
 
 npm run dev
 
 
 The application will be running and accessible at http://localhost:3000.
 
-3. Seeding the Database
+**3. Seeding the Database**
 
 This project does not require a database seed script. After running db:push, you can populate the database using the application's UI:
 
@@ -125,12 +125,12 @@ Go to http://localhost:3000/categories to create your first categories.
 
 Go to http://localhost:3000/posts/new to create your first post.
 
-Trade-offs and Decisions
+**Trade-offs and Decisions**
 
-Content Editor (Markdown): I chose to implement Markdown support as suggested in the assessment's "Recommended Shortcuts." This was significantly faster than integrating a complex block-style editor, which allowed me to spend more time perfecting the core API logic, database relationships, and type-safety.
+**Content Editor (Markdown):** I chose to implement Markdown support as suggested in the assessment's "Recommended Shortcuts." This was significantly faster than integrating a complex block-style editor, which allowed me to spend more time perfecting the core API logic, database relationships, and type-safety.
 
-UI Styling (Pure Tailwind): I opted to use pure Tailwind CSS for all components instead of a pre-built library. While a library like shadcn/ui might have been quicker, building the components from scratch demonstrates a strong understanding of Tailwind and allowed me to create a lightweight, custom UI that perfectly matched the project's design goals.
+**UI Styling (Pure Tailwind):** I opted to use pure Tailwind CSS for all components instead of a pre-built library. While a library like shadcn/ui might have been quicker, building the components from scratch demonstrates a strong understanding of Tailwind and allowed me to create a lightweight, custom UI that perfectly matched the project's design goals.
 
-Time Spent
+**Total time spent: ~15 hours**
 
-Total time spent: ~15 hours
+## Mufaddal Virpur
